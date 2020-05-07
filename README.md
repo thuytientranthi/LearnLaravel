@@ -19,3 +19,8 @@ Go to workspace
 ```
 docker-compose exec workspace bash
 ```
+
+Create project
+```
+composer create-project --presist laravel/laravel {project-name} "5.5.*"
+```

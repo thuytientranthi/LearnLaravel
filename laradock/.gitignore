@@ -17,4 +17,4 @@
 !/.devcontainer/devcontainer.example.json
 !/.devcontainer/docker-compose.extend-example.yml
 
-.DS_Store
+.DS_Storegit status
