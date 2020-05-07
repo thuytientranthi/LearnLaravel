@@ -19,3 +19,15 @@ Go to workspace
 ```
 docker-compose exec workspace bash
 ```
+
+Go to host file
+```
+sudo vim /etc/hosts
+```
+
+Map domain `learn-laravel.test` with ip `127.0.0.1` (Add end of file)
+```
+127.0.0.1       learn-laravel.test
+```
+
+Go to `learn-laravel.test` and Enjoy it
