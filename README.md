@@ -5,7 +5,7 @@ Go to laradock
 cd laradock
 ```
 
-Copy `env.example` to `.env`
+Copy `env-example` to `.env`
 ```
 cp env.example .env
 ```
