@@ -2,126 +2,102 @@
 
 namespace App\Repositories;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
-use Prettus\Repository\Eloquent\BaseRepository as BaseRepo;
-
-abstract class BaseRepository extends BaseRepo
+abstract class BaseRepository
 {
     /**
-     * Get all data
+     * @var \Illuminate\Database\Eloquent\Model
+     */
+    protected $_model;
+
+    /**
+     * EloquentRepository constructor.
+     */
+    public function __construct()
+    {
+        $this->setModel();
+    }
+
+    /**
+     * get model
+     * @return string
+     */
+    abstract public function getModel();
+
+    /**
+     * Set model
+     */
+    public function setModel()
+    {
+        $this->_model = app()->make(
+            $this->getModel()
+        );
+    }
+
+    /**
+     * Get All
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function getAll()
     {
-        return $model->all();
+        return $this->_model->all();
     }
 
     /**
-     * Delete data with conditions.
-     *
-     * @param array $where Conditions to delete
-     *
+     * Get one
+     * @param $id
      * @return mixed
      */
-    public function deleteWhere(array $where)
+    public function find($id)
     {
-        return $this->model->where($where)->delete();
+        $result = $this->_model->find($id);
+
+        return $result;
     }
 
     /**
-     * Inserting records into the database table.
-     *
-     * @param array $data      Rows data
-     * @param array $timestamp Timestamp
-     *
-     * @return bool
+     * Create
+     * @param array $attributes
+     * @return mixed
      */
-    public function insertMany($data, $timestamp = false)
+    public function create(array $attributes)
     {
-        if ($timestamp) {
-            foreach ($data as $key => $value) {
-                $value['updated_at'] = Carbon::now();
-                $value['created_at'] = Carbon::now();
-                $data[$key] = $value;
-            }
+
+        return $this->_model->create($attributes);
+    }
+
+    /**
+     * Update
+     * @param $id
+     * @param array $attributes
+     * @return bool|mixed
+     */
+    public function update($id, array $attributes)
+    {
+        $result = $this->find($id);
+        if ($result) {
+            $result->update($attributes);
+            return $result;
         }
 
-        return \DB::table($this->model->getTable())->insert($data);
+        return false;
     }
 
     /**
-     * Delete a model.
+     * Delete
      *
-     * @param Collection $model Model
-     *
-     * @return mixed
+     * @param $id
+     * @return bool
      */
-    public function deleteModel($model)
+    public function delete($id)
     {
-        return $model->delete();
+        $result = $this->find($id);
+        if ($result) {
+            $result->delete();
+
+            return true;
+        }
+
+        return false;
     }
 
-    /**
-     * This method overide "update" method.
-     *
-     * @param array $attributes Attribute to update
-     * @param int   $id         Model's id
-     *
-     * @return mixed
-     */
-    public function update(array $attributes, $id)
-    {
-        $this->applyCriteria();
-        parent::update($attributes, $id);
-    }
-
-    /**
-     * First or create.
-     *
-     * @param array $attributes Attributes
-     *
-     * @return mixed
-     */
-    public function firstOrCreate(array $attributes = [])
-    {
-        return $this->model->firstOrCreate($attributes);
-    }
-
-    /**
-     * Update a model.
-     *
-     * @param Collection $model      Model
-     * @param array      $attributes Attributes
-     *
-     * @return mixed
-     */
-    public function updateModel($model, $attributes)
-    {
-        return $model->update($attributes);
-    }
-
-    /**
-     * Get query builder for datatables.
-     *
-     * @param array $column query column
-     *
-     * @return Illuminate\Database\Eloquent\Builder         QueryBuilder for datatable
-     */
-    public function datatables($column = ['*'])
-    {
-        $this->applyCriteria();
-        $this->applyScope();
-
-        return $this->model->select($column);
-    }
-
-    /**
-     * This method overide "withTrashed" method.
-     *
-     * @return mixed
-     */
-    public function withTrashed()
-    {
-        return $this->model->withTrashed();
-    }
 }

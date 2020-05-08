@@ -1,23 +1,42 @@
 <?php
 
-namespace App\Services;
+namespace App\Http\Services;
 
-use App\Repositories\CategoryRepository;
+use App\Repositories\Category\CategoryInterface;
 
-class CategoryService extends BaseService
-{
-    private $categoryRepository;
+/**
+ * Class CategoryServices
+ * @package App\Http\Services
+ *
+ */
+class CategoryServices extends Service {
 
-    public function __construct(CategoryRepository $categoryRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
+    protected $_categoryRepository;
+
+    /**
+     * CategoryServices constructor.
+     * @param CategoryInterface $categoryRepository
+     */
+    public function __construct(CategoryInterface $categoryRepository) {
+        $this->_categoryRepository = $categoryRepository;
     }
 
     /**
-     * Get all data
+     * Get list category
+     *
+     * @return mixed
      */
-    public function getAll()
-    {
-        return $this->getAll();
+    public function getListCategory() {
+        return $this->_categoryRepository->all();
+    }
+
+    /**
+     * Find category by id
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function find($id) {
+        return $this->_categoryRepository->find($id);
     }
 }

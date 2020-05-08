@@ -1,11 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Services\CategoryServices;
 use Illuminate\Http\Request;
 
-class CategoryContronller extends Controller
+class CategoryController extends Controller
 {
+    private $categoryService;
+
+    public function __construct(CategoryServices $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +22,7 @@ class CategoryContronller extends Controller
      */
     public function index()
     {
-        return $this->
+        dd($this->categoryService->getListCategory());
     }
 
     /**
@@ -45,7 +54,7 @@ class CategoryContronller extends Controller
      */
     public function show($id)
     {
-        //
+        dd($this->categoryService->find($id));
     }
 
     /**

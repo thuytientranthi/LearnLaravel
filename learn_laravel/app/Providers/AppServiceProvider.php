@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            \App\Repositories\Category\CategoryInterface::class,
+            \App\Repositories\Category\CategoryRepository::class
+        );
     }
 }
